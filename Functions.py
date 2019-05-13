@@ -22,7 +22,7 @@ class CombineData:
 
 def calcHiddenLayer(data, alpha, numHiddenLayers):
   if numHiddenLayers == 0:
-    return
+    return []
   else:
     tempData = data.train_ds
     i, o = len(tempData.x.classes), len(tempData.y.classes)
