@@ -67,7 +67,7 @@ def PredictTest(df, learner, column):
       i+=1
   return i/len(df)
 
-def findBestAlpha(data:DataBunch):
+def findBestAlpha(data):
   i = 1
   for x in range(10):
     learn = tabular_learner(data, layers=calcHiddenLayer(data, i, 2), metrics=accuracy, callback_fns=SaveModelCallback)
