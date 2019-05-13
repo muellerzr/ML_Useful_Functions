@@ -56,3 +56,15 @@ def PredictTest(df, learner, column):
     if(str(learner.predict(df.iloc[x])[0]) == df[column].iloc[x]):
       i+=1
   return i/len(df)
+
+def findBestAlpha(data:DataBunch):
+  i = 1
+  for x in range(10):
+    learn = tabular_learner(data, layers=calcHiddenLayer(data, i, 2), metrics=accuracy, callback_fns=SaveModelCallback)
+    if x == 0:
+      print('Alpha:', i)
+    else:
+      print('\nAlpha:', i)
+    with progress_disabled_ctx(learn) as learn:
+      learn.fit_one_cycle(5)
+    i += 1
