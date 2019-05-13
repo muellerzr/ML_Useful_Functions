@@ -42,7 +42,10 @@ def feature_importance(learner, cat_names, cont_names):
 
 from sklearn.model_selection import train_test_split
 
-train, test = train_test_split(df, test_size=0.1)
+def SplitSet(df):
+  train, test = train_test_split(df, test_size=0.1)
+  return train, test
+
 
 def PredictTest(df, learner, column):
   i = 0
