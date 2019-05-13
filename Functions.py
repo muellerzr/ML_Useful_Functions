@@ -20,8 +20,11 @@ class CombineData:
     self.valid = df1.valid.append([df2.valid])
     self.test = df1.test.append([df2.test])
 
-def calcHiddenLayer(data, alpha, ip, op, numHiddenLayers):
-  return [(len(data.train_ds)//(alpha*(ip+op)))//numHiddenLayers]*numHiddenLayers
+def calcHiddenLayer(data, alpha, numHiddenLayers):
+  tempData = data.train_ds
+  i, o = len(tempData.x.classes), len(tempData.y.classes)
+  io = i+o
+  return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
 
 def feature_importance(learner, cat_names, cont_names):
     loss0=np.array([learner.loss_func(learner.pred_batch(batch=(x,y.to("cpu"))), y.to("cpu")) for x,y in iter(learner.data.valid_dl)]).mean()
