@@ -26,7 +26,7 @@ def calcHiddenLayer(data, alpha, numHiddenLayers):
   io = i+o
   return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
 
-def feature_importance(learner, cat_names, cont_names):
+def feature_importance(learner, cat_names, cont_names, thresh:float=0):
     loss0=np.array([learner.loss_func(learner.pred_batch(batch=(x,y.to("cpu"))), y.to("cpu")) for x,y in iter(learner.data.valid_dl)]).mean()
     fi=dict()
     types=[cat_names, cont_names]
@@ -41,7 +41,17 @@ def feature_importance(learner, cat_names, cont_names):
           loss.append(learner.loss_func(learner.pred_batch(batch=(x,y)), y))
         fi[c]=np.array(loss).mean()-loss0
     d = sorted(fi.items(), key=lambda kv: kv[1], reverse=True)
-    return pd.DataFrame({'cols': [l for l, v in d], 'imp': np.log1p([v for l, v in d])})
+    df = pd.DataFrame({'cols': [l for l, v in d], 'imp': np.log1p([v for l, v in d])})
+    df = df[df['imp'] > thresh]
+    cat_vars = []
+    cont_vars = []
+    for item in list(df.cols):
+      if item in cat_names:
+        cat_vars.append(item)
+      if item in cont_names:
+        cont_vars.append(item)
+    return cat_vars, cont_vars
+
 
 from sklearn.model_selection import train_test_split
 
