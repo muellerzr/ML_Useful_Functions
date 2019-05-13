@@ -21,6 +21,8 @@ class CombineData:
     self.test = df1.test.append([df2.test])
 
 def calcHiddenLayer(data, alpha, numHiddenLayers):
+  if numHiddenLayers == 0:
+    return
   tempData = data.train_ds
   i, o = len(tempData.x.classes), len(tempData.y.classes)
   io = i+o
