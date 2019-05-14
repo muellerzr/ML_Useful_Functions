@@ -65,12 +65,20 @@ def SplitSet(df):
   return train, test
 
 
-def PredictTest(df, learner, column):
-  i = 0
-  for x in range(len(df)):
-    if(str(learner.predict(df.iloc[x])[0]) == df[column].iloc[x]):
-      i+=1
-  return i/len(df)
+def PredictTest(df, learner):
+  data = learn.data.train_ds.x
+  path = learn.path
+  cat_names = data.cat_names
+  cont_names = data.cont_names
+  procs = data.procs
+  testData = (TabularList.from_df(df, path=path, cat_names=cat_vars, cont_names=cont_vars, procs=procs)
+       .split_none()
+       .label_from_df(cols=dep_var)
+       .databunch())
+  results = learn.validate(testData.train_dl)
+  acc = float(results[1]) * 100
+  print("Test accuracy of: " + str(acc))
+  return acc
 
 def findBestAlpha(data):
   i = 1
