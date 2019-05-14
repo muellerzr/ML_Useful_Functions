@@ -72,7 +72,7 @@ def PredictTest(df, learner):
   cat_names = data.cat_names
   cont_names = data.cont_names
   procs = data.procs
-  testData = (TabularList.from_df(df, path=path, cat_names=cat_vars, cont_names=cont_vars, procs=procs)
+  testData = (TabularList.from_df(df, path=path, cat_names=cat_names, cont_names=cont_names, procs=procs)
        .split_none()
        .label_from_df(cols=dep_var)
        .databunch())
