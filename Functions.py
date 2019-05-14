@@ -127,4 +127,4 @@ class SaveModelCallback(TrackerCallback):
         if self.every=="improvement" and (self.learn.path/f'{self.learn.model_dir}/{self.name}.pth').is_file():
             self.learn.load(f'{self.name}', purge=False)
             current = self.get_monitor_value()
-            #print(float(current))
+            print(float(current))
