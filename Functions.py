@@ -66,18 +66,17 @@ def SplitSet(df):
   return train, test
 
 
-def PredictTest(df, learner, dep_var):
-  data = learner.data.train_ds.x
-  path = learner.path
+def PredictTest(df, learn, dep_var):
+  data = learn.data.train_ds.x
+  path = learn.path
   cat_names = data.cat_names
   cont_names = data.cont_names
-  dep_var = data.col_names[0]
   procs = data.procs
-  testData = (TabularList.from_df(df, path=path, cat_names=cat_names, cont_names=cont_names, procs=procs)
+  testData = (TabularList.from_df(df, path=path, cat_names=cat_vars, cont_names=cont_vars, procs=procs)
        .split_none()
        .label_from_df(cols=dep_var)
        .databunch())
-  results = learner.validate(testData.train_dl)
+  results = learn.validate(testData.train_dl)
   acc = float(results[1]) * 100
   print("Test accuracy of: " + str(acc))
   return acc
