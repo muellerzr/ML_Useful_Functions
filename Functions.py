@@ -71,6 +71,7 @@ def PredictTest(df, learner):
   path = learner.path
   cat_names = data.cat_names
   cont_names = data.cont_names
+  dep_var = data.col_names[0]
   procs = data.procs
   testData = (TabularList.from_df(df, path=path, cat_names=cat_names, cont_names=cont_names, procs=procs)
        .split_none()
