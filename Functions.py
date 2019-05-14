@@ -66,7 +66,7 @@ def SplitSet(df):
   return train, test
 
 
-def PredictTest(df, learner):
+def PredictTest(df, learner, dep_var):
   data = learner.data.train_ds.x
   path = learner.path
   cat_names = data.cat_names
