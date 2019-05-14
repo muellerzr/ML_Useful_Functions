@@ -6,6 +6,7 @@
 import torch as torch
 import numpy as np
 import pandas as pd
+from fastai.tabular import *
 from sklearn.model_selection import train_test_split
 
 class PrepData:
