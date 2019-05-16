@@ -38,7 +38,7 @@ def calcHiddenLayer(data, alpha, numHiddenLayers:int = 2):
     return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
   
 def feature_importance(learner, thresh:float=0):
-    data = learn.data.train_ds.x
+    data = learner.data.train_ds.x
     cat_names = data.cat_names
     cont_names = data.cont_names
     loss0=np.array([learner.loss_func(learner.pred_batch(batch=(x,y.to("cpu"))), y.to("cpu")) for x,y in iter(learner.data.valid_dl)]).mean()
