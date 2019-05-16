@@ -17,6 +17,7 @@ def plotFunctions():
   os.chdir('..')
   os.rename('content/ML_Useful_Functions/basic_train.py', 'usr/local/lib/python3.6/dist-packages/fastai/basic_train.py')
   os.chdir('content')
+  os._exit(00)
   return
 
 class PrepData:
