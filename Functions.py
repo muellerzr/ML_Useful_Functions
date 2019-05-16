@@ -28,7 +28,7 @@ class CombineData:
     self.valid = df1.valid.append([df2.valid])
     self.test = df1.test.append([df2.test])
 
-def calcHiddenLayer(data, alpha, numHiddenLayers):
+def calcHiddenLayer(data, alpha, numHiddenLayers:int = 0):
   if numHiddenLayers == 0:
     return []
   else:
