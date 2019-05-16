@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 
 def plotFunctions():
   os.chdr('')
-  mv ML_Useful_Functions/basic_train.py usr/local/lib/python3.6/dist-packages/fastai/basic_train.py
+  !mv ML_Useful_Functions/basic_train.py usr/local/lib/python3.6/dist-packages/fastai/basic_train.py
   os.chdir('content')
   return
 
