@@ -6,10 +6,16 @@
 import torch as torch
 import numpy as np
 import pandas as pd
+import os
 from fastai.tabular import *
 from fastai.utils.mod_display import *
 from fastai.callbacks import *
 from sklearn.model_selection import train_test_split
+
+def plotFunctions():
+  os.chdr('')
+  mv ML_Useful_Functions/basic_train.py usr/local/lib/python3.6/dist-packages/fastai/basic_train.py
+  return
 
 class PrepData:
   def __init__(self, dataframe, activity):
