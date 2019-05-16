@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 def plotFunctions():
   os.chdr('')
   args = ['mv', 'ML_Useful_Functions/basic_train.py', 'usr/local/lib/python3.6/dist-packages/fastai/basic_train.py'
-  subprocess.Popen(args)
+  subprocess.call(args)
   os.chdir('content')
   return
 
