@@ -7,7 +7,7 @@ import torch as torch
 import numpy as np
 import pandas as pd
 import os
-import subprosses
+import subprocess
 from fastai.tabular import *
 from fastai.utils.mod_display import *
 from fastai.callbacks import *
