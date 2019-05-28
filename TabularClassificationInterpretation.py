@@ -1,7 +1,4 @@
-from ..torch_core import *
-from ..layers import *
-from ..basic_train import *
-from ..basic_data import *
+from fastai.tabular import *
 
 class ClassificationInterpretationTabular():
     "Interpretation methods for classification models with tabular data."
