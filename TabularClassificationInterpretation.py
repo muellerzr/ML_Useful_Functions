@@ -28,8 +28,8 @@ class ClassificationInterpretationTabular():
         plt.imshow(cm, interpolation='nearest', cmap=cmap)
         plt.title(title)
         tick_marks = np.arange(self.data.c)
-        plt.xticks(tick_marks, list(range(self.data.c)), rotation=90)
-        plt.yticks(tick_marks, list(range(self.data.c)), rotation=0)
+        plt.xticks(tick_marks, list(self.data.classes), rotation=90)
+        plt.yticks(tick_marks, list(self.data.classes), rotation=0)
 
         if normalize: cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         thresh = cm.max() / 2.
@@ -37,7 +37,7 @@ class ClassificationInterpretationTabular():
             coeff = f'{cm[i, j]:.{norm_dec}f}' if normalize else f'{cm[i, j]}'
             plt.text(j, i, coeff, horizontalalignment="center", color="white" if cm[i, j] > thresh else "black")
 
-        #plt.tight_layout()
+        plt.tight_layout()
         plt.ylabel('Actual')
         plt.xlabel('Predicted')
         
