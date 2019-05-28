@@ -1,3 +1,8 @@
+from ..torch_core import *
+from ..layers import *
+from ..basic_train import *
+from ..basic_data import *
+
 class ClassificationInterpretationTabular():
     "Interpretation methods for classification models with tabular data."
     def __init__(self, data:DataBunch, probs:Tensor, y_true:Tensor, losses:Tensor):
