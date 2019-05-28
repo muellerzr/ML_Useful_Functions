@@ -46,7 +46,8 @@ def calcHiddenLayer(data, alpha, numHiddenLayers:int = 2):
     io = i+o
     return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
   
-def feature_importance(learner, thresh:float=0):
+def feature_importance(learner, top_n:int = 5): 
+  # based on: https://medium.com/@mp.music93/neural-networks-feature-importance-with-fastai-5c393cf65815
     data = learner.data.train_ds.x
     cat_names = data.cat_names
     cont_names = data.cont_names
@@ -65,14 +66,12 @@ def feature_importance(learner, thresh:float=0):
         fi[c]=np.array(loss).mean()-loss0
     d = sorted(fi.items(), key=lambda kv: kv[1], reverse=True)
     df = pd.DataFrame({'cols': [l for l, v in d], 'imp': np.log1p([v for l, v in d])})
-    df = df[df['imp'] > thresh]
-    cat_vars = []
-    cont_vars = []
-    for item in list(df.cols):
-      if item in cat_names:
-        cat_vars.append(item)
-      if item in cont_names:
-        cont_vars.append(item)
+    cat_vars, cont_vars = [],[]
+    for x in range(top_n):
+      if df['cols'].iloc[x] in cat_names:
+        cat_vars.append(df['cols'].iloc[x])
+      if df['cols'].iloc[x] in cont_names:
+        cont_vars.append(df['cols'].iloc[x])
     return cat_vars, cont_vars
 
 def SplitSet(df):
