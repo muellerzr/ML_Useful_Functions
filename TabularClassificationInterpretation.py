@@ -5,6 +5,7 @@ class ClassificationInterpretationTabular():
     def __init__(self, data:DataBunch, probs:Tensor, y_true:Tensor, losses:Tensor):
         self.data,self.probs,self.y_true,self.losses = data,probs,y_true,losses
         self.pred_class = self.probs.argmax(dim=1)
+        self.cm = self.confusion_matrix()
 
     @classmethod
     def from_learner(cls, learn:Learner, ds_type:DatasetType=DatasetType.Valid):
@@ -25,7 +26,7 @@ class ClassificationInterpretationTabular():
     def plot_confusion_matrix(self, normalize:bool=False, title:str='Confusion matrix', cmap:Any="Blues", norm_dec:int=2, **kwargs)->None:
         "Plot the confusion matrix, with `title` and using `cmap`."
         # This function is mainly copied from the sklearn docs
-        cm = self.confusion_matrix()
+        cm = self.cm
         plt.figure(**kwargs)
         plt.imshow(cm, interpolation='nearest', cmap=cmap)
         plt.title(title)
@@ -45,7 +46,7 @@ class ClassificationInterpretationTabular():
         
     def most_confused(self, min_val:int=1, slice_size:int=1)->Collection[Tuple[str,str,int]]:
             "Sorted descending list of largest non-diagonal entries of confusion matrix, presented as actual, predicted, number of occurrences."
-            cm = self.confusion_matrix()
+            cm = self.cm
             np.fill_diagonal(cm, 0)
             res = [(self.data.classes[i],self.data.classes[j],cm[i,j])
                     for i,j in zip(*np.where(cm>=min_val))]
