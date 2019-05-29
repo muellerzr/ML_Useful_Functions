@@ -1,6 +1,6 @@
 from fastai.tabular import *
 
-class myClassificationInterpretationTabular():
+class ClassificationInterpretationTabular():
     "Interpretation methods for classification models with tabular data."
     def __init__(self, data:DataBunch, probs:Tensor, y_true:Tensor, losses:Tensor):
         self.data,self.probs,self.y_true,self.losses = data,probs,y_true,losses
