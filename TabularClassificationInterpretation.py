@@ -50,3 +50,31 @@ class ClassificationInterpretationTabular():
             res = [(self.data.classes[i],self.data.classes[j],cm[i,j])
                     for i,j in zip(*np.where(cm>=min_val))]
             return sorted(res, key=itemgetter(2), reverse=True)
+   
+    def plot_top_losses(self, k, largest = True, return_table:bool=False):
+        "Shows the respective rows in top_losses along with their prediction, actual, loss, and probability"
+        tl_val, tl_idx = self.top_losses(k)
+        classes = self.data.classes
+        cat_names = self.data.x.cat_names
+        cont_names = self.data.x.cont_names
+        df = pd.DataFrame(columns = [['Prediction', 'Actual', 'Loss','Prob'] +  cat_names + cont_names])
+        for i, idx in enumerate(tl_idx):
+          da, cl = self.data.dl().dataset[idx]
+          cl = int(cl)
+          t1 = str(da)
+          t1 = t1.split(';')
+          arr = []
+          arr.append(classes[self.pred_class[idx]])
+          arr.append(classes[cl])
+          arr.append(f'{self.losses[idx]:.2f}')
+          arr.append(f'{self.probs[idx][cl]:.2f}')
+          for x in range(len(t1)-1):
+            _, value = t1[x].split()
+            arr.append(value)
+          df.loc[i] = arr
+        display(df)
+        if return_table: return df
+        
+    def top_losses(self, k:int=None, largest=True):
+        "`k` largest(/smallest) losses and indexes, defaulting to all losses (sorted by `largest`)."
+        return self.losses.topk(ifnone(k, len(self.losses)), largest=largest)
