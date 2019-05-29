@@ -1,6 +1,6 @@
 from fastai.tabular import *
 
-class ClassificationInterpretationTabular():
+class myClassificationInterpretationTabular():
     "Interpretation methods for classification models with tabular data."
     def __init__(self, data:DataBunch, probs:Tensor, y_true:Tensor, losses:Tensor):
         self.data,self.probs,self.y_true,self.losses = data,probs,y_true,losses
@@ -70,7 +70,7 @@ class ClassificationInterpretationTabular():
           arr.append(f'{self.losses[idx]:.2f}')
           arr.append(f'{self.probs[idx][cl]:.2f}')
           for x in range(len(t1)-1):
-            _, value = t1[x].split()
+            _, value = t1[x].rsplit(' ',1)
             arr.append(value)
           df.loc[i] = arr
         display(df)
