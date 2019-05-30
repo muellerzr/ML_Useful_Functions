@@ -50,7 +50,11 @@ class ClassificationInterpretationTabular():
             np.fill_diagonal(cm, 0)
             res = [(self.data.classes[i],self.data.classes[j],cm[i,j])
                     for i,j in zip(*np.where(cm>=min_val))]
-            return sorted(res, key=itemgetter(2), reverse=True)
+            confused = pd.DataFrame(columns=['Predicted', 'Actual', 'Number of Occurrences'])
+            c = sorted(res, key=itemgetter(2), reverse=True)
+            for x in range(len(c)):
+              confused.loc[x] = c[x]
+            display(confused)
    
     def plot_top_losses(self, k, largest = True, return_table:bool=False):
         "Shows the respective rows in top_losses along with their prediction, actual, loss, and probability"
