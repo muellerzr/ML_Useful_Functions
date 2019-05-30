@@ -44,7 +44,7 @@ class ClassificationInterpretationTabular():
         plt.ylabel('Actual')
         plt.xlabel('Predicted')
         
-    def most_confused(self, min_val:int=1, slice_size:int=1)->Collection[Tuple[str,str,int]]:
+    def most_confused(self, min_val:int=1, slice_size:int=1, return_df:bool=False)->Collection[Tuple[str,str,int]]:
             "Sorted descending list of largest non-diagonal entries of confusion matrix, presented as actual, predicted, number of occurrences."
             cm = self.cm
             np.fill_diagonal(cm, 0)
@@ -55,6 +55,11 @@ class ClassificationInterpretationTabular():
             for x in range(len(c)):
               confused.loc[x] = c[x]
             display(confused)
+            if return_df:
+              return confused
+            else:
+              return c
+            
    
     def plot_top_losses(self, k, largest = True, return_table:bool=False):
         "Shows the respective rows in top_losses along with their prediction, actual, loss, and probability"
