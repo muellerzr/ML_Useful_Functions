@@ -46,7 +46,7 @@ def calcHiddenLayer(data, alpha, numHiddenLayers:int = 2):
     io = i+o
     return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
   
-def feature_importance(learner, top_n:int = 5, return_table:boolean = False): 
+def feature_importance(learner, top_n:int = 5, return_table:bool = False): 
   # based on: https://medium.com/@mp.music93/neural-networks-feature-importance-with-fastai-5c393cf65815
     data = learner.data.train_ds.x
     cat_names = data.cat_names
