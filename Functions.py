@@ -46,7 +46,7 @@ def calcHiddenLayer(data, alpha, numHiddenLayers:int = 2):
     io = i+o
     return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
   
-def feature_importance(learner, top_n:int = 5): 
+def feature_importance(learner, top_n:int = 5, return_table:boolean = False): 
   # based on: https://medium.com/@mp.music93/neural-networks-feature-importance-with-fastai-5c393cf65815
     data = learner.data.train_ds.x
     cat_names = data.cat_names
@@ -72,7 +72,10 @@ def feature_importance(learner, top_n:int = 5):
         cat_vars.append(df['cols'].iloc[x])
       if df['cols'].iloc[x] in cont_names:
         cont_vars.append(df['cols'].iloc[x])
-    return cat_vars, cont_vars
+    if return_table:
+      return cat_vars, cont_vars, pd.DataFrame({'cols': [l for l, v in d], 'imp': np.log1p([v for l, v in d])})
+    else:
+      return cat_vars, cont_vars
 
 def SplitSet(df):
   train, test = train_test_split(df, test_size=0.1)
