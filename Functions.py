@@ -52,15 +52,16 @@ def feature_importance(learner, top_n:int = 5, return_table:bool = False):
     cat_names = data.cat_names
     cont_names = data.cont_names
     loss0=np.array([learner.loss_func(learner.pred_batch(batch=(x,y.to("cpu"))), y.to("cpu")) for x,y in iter(learner.data.valid_dl)]).mean()
+    #The above gives us our ground truth for our validation set
     fi=dict()
     types=[cat_names, cont_names]
-    for j, t in enumerate(types):
+    for j, t in enumerate(types): # for all of cat_names and cont_names
       for i, c in enumerate(t):
         loss=[]
-        for x,y in iter(learner.data.valid_dl):
-          col=x[j][:,i]    #x[0] da hier cat-vars
-          idx = torch.randperm(col.nelement())
-          x[j][:,i] = col.view(-1)[idx].view(col.size())
+        for x,y in iter(learner.data.valid_dl): # for all values in validation set
+          col=x[j][:,i] # select one column of tensors
+          idx = torch.randperm(col.nelement()) # generate a random tensor
+          x[j][:,i] = col.view(-1)[idx].view(col.size()) # replace the old tensor with a new one
           y=y.to('cpu')
           loss.append(learner.loss_func(learner.pred_batch(batch=(x,y)), y))
         fi[c]=np.array(loss).mean()-loss0
