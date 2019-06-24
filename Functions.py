@@ -46,37 +46,38 @@ def calcHiddenLayer(data, alpha, numHiddenLayers:int = 2):
     io = i+o
     return [(len(data.train_ds)//(alpha*(io)))//numHiddenLayers]*numHiddenLayers
   
-def feature_importance(learner, top_n:int = 5, return_table:bool = False): 
-  # based on: https://medium.com/@mp.music93/neural-networks-feature-importance-with-fastai-5c393cf65815
-    data = learner.data.train_ds.x
+def feature_importance(learn:Learner): 
+    pd.options.mode.chained_assignment = None
+    # based on: https://medium.com/@mp.music93/neural-networks-feature-importance-with-fastai-5c393cf65815
+    data = learn.data.train_ds.x
     cat_names = data.cat_names
     cont_names = data.cont_names
-    loss0=np.array([learner.loss_func(learner.pred_batch(batch=(x,y.to("cpu"))), y.to("cpu")) for x,y in iter(learner.data.valid_dl)]).mean()
+    loss0=np.array([learn.loss_func(learn.pred_batch(batch=(x,y.to("cpu"))), y.to("cpu")) for x,y in iter(learn.data.valid_dl)]).mean()
     #The above gives us our ground truth for our validation set
     fi=dict()
     types=[cat_names, cont_names]
-    for j, t in enumerate(types): # for all of cat_names and cont_names
-      for i, c in enumerate(t):
-        loss=[]
-        for x,y in iter(learner.data.valid_dl): # for all values in validation set
-          col=x[j][:,i] # select one column of tensors
-          idx = torch.randperm(col.nelement()) # generate a random tensor
-          x[j][:,i] = col.view(-1)[idx].view(col.size()) # replace the old tensor with a new one
-          y=y.to('cpu')
-          loss.append(learner.loss_func(learner.pred_batch(batch=(x,y)), y))
-        fi[c]=np.array(loss).mean()-loss0
+    with tqdm(total=len(data.col_names)) as pbar:
+      for j, t in enumerate(types): # for all of cat_names and cont_names
+        for i, c in enumerate(t):
+          loss=[]
+          for x,y in (iter(learn.data.valid_dl)): # for all values in validation set
+            col=x[j][:,i] # select one column of tensors
+            idx = torch.randperm(col.nelement()) # generate a random tensor
+            x[j][:,i] = col.view(-1)[idx].view(col.size()) # replace the old tensor with a new one
+            y=y.to('cpu')
+            loss.append(learn.loss_func(learn.pred_batch(batch=(x,y)), y))
+          pbar.update(1)
+          fi[c]=np.array(loss).mean()-loss0
     d = sorted(fi.items(), key=lambda kv: kv[1], reverse=True)
-    df = pd.DataFrame({'cols': [l for l, v in d], 'imp': np.log1p([v for l, v in d])})
-    cat_vars, cont_vars = [],[]
-    for x in range(top_n):
-      if df['cols'].iloc[x] in cat_names:
-        cat_vars.append(df['cols'].iloc[x])
-      if df['cols'].iloc[x] in cont_names:
-        cont_vars.append(df['cols'].iloc[x])
-    if return_table:
-      return cat_vars, cont_vars, pd.DataFrame({'cols': [l for l, v in d], 'imp': np.log1p([v for l, v in d])})
-    else:
-      return cat_vars, cont_vars
+    
+    df = pd.DataFrame({'Variable': [l for l, v in d], 'Importance': np.log1p([v for l, v in d])})
+    df['Type'] = ''
+    for x in range(len(df)):
+      if df['Variable'].iloc[x] in cat_names:
+        df['Type'].iloc[x] = 'categorical'
+      if df['Variable'].iloc[x] in cont_names:
+        df['Type'].iloc[x] = 'continuous'
+    return df
 
 def SplitSet(df):
   train, test = train_test_split(df, test_size=0.1)
