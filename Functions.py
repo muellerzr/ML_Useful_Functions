@@ -12,6 +12,7 @@ from fastai.tabular import *
 from fastai.utils.mod_display import *
 from fastai.callbacks import *
 from sklearn.model_selection import train_test_split
+from tqdm import tqdm
 
 def plotFunctions():
   os.chdir('..')
